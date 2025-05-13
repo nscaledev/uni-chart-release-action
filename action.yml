@@ -1,4 +1,5 @@
 # Copyright 2022-2024 EscherCloud.
+# Copyright 2025 the Unikorn Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,11 +28,12 @@ runs:
     run: |
       owner=$(cut -d '/' -f 1 <<< "$GITHUB_REPOSITORY")
       repo=$(cut -d '/' -f 2 <<< "$GITHUB_REPOSITORY")
+      path=charts/$(sed -e s/^uni-// <<< $repo)
 
       curl -sSLo cr.tar.gz "https://github.com/helm/chart-releaser/releases/download/v${{ inputs.version }}/chart-releaser_${{ inputs.version }}_linux_amd64.tar.gz"
       tar -xzf cr.tar.gz
 
-      ./cr package charts/${repo}
+      ./cr package ${path}
 
       ./cr upload \
           --owner ${owner} \
